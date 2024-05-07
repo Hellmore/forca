@@ -23,8 +23,8 @@ int sorteia_palavra(int faixa);
 int main(){
 
     setlocale(LC_ALL, "Portuguese");
-    int contador, opcao;
-    char frase[100];
+    int contador, opcao, certo, qtdCaracter, n, i, erro1, erro2, erro3, erro4, erro5;
+    char frase[100], tentativa, resposta[100], confirmar, continuar;
 
     do {
         MENU:
@@ -60,10 +60,62 @@ int main(){
             goto MENU;
         }
 
+        confirmar = 'n';
+
+        while(confirmar != 'S'){
+            certo = 0;
+            qtdCaracter=0;
+            n = 0;
+            i=0;
+            contador = 0;
+            erro1 = ' ';
+            erro2 = ' ';
+            erro3 = ' ';
+            erro4 = ' ';
+            erro5 = ' ';
+            tentativa=' ';
+            printf("O jogo sera iniciado...\n");
+            system("PAUSE");
+            system("CLS");
+            for(i = 0; i < 100; i++)
+            {
+                resposta[i]='_';
+            }
+            while(contador < 6)
+            {
+                n=0;
+                certo=0;
+                DesenhaForca(contador,0);
+
+                for(i=0; i < 100; i++)
+                {
+                    if(frase[i]=='\0')
+                    {
+                        qtdCaracter = i;
+                        break;
+                    }
+                    else
+                    {
+                        if(frase[i]==' ')
+                        {
+                            resposta[i]=' ';
+                            printf("%c", resposta[i]);
+                        }
+                        else
+                        {
+                            if(frase[i]==tentativa)
+                            {
+                                resposta[i]=frase[i];
+                            }
+                        }
+                    }
+                    printf("%c ", resposta[i]);
+                }
+
     } while (contador = 1);
 }
 
-desenha_forca(int contador, int inicio){
+void desenha_forca(int contador, int inicio){
     if(inicio == 0){
             switch(contador){
                 case 0:
