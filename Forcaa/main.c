@@ -10,12 +10,13 @@ int inicia_jogo();
 void desenha_forca(int contador, int inicio);
 int verifica_tamanho(char* palavra);
 char* cria_string_vazia(char* string_vazia, int tamanho);
-void verifica_tentativa(char* palavra, char* palavra_vazia, char* erros);
+void verifica_tentativa(char* palavra, char* palavra_vazia, char* erros, int contador_erros);
+void mostra_erros(char erros[], int contador_erros);
 
 
 int main()
 {
-    int inicio_do_jogo, contador_jogadas = 0, tamanho_palavra;
+    int inicio_do_jogo, contador_erros = 0, tamanho_palavra;
     char palavra[100], palavra_vazia[100], erros[6] = {' '};
 
     setlocale(LC_ALL, "Portuguese");
@@ -28,8 +29,12 @@ int main()
             system("cls");
             tamanho_palavra = verifica_tamanho(palavra);
             strcpy(palavra_vazia, cria_string_vazia(palavra_vazia, tamanho_palavra));
-            desenha_forca(contador_jogadas, 0);
-            verifica_tentativa(palavra, palavra_vazia, erros);
+            do {
+                desenha_forca(contador_erros, 0);
+                verifica_tentativa(palavra, palavra_vazia, erros, contador_erros);
+                mostra_erros(erros, contador_erros);
+            } while (contador_erros <= 6);
+
 
 
         }
@@ -174,7 +179,7 @@ void desenha_forca(int contador, int inicio){
     if(inicio == 0){
             switch(contador){
                 case 0:
-                    printf("Começou o jogo! Você tem 6 tentativas!\n");
+                    printf("Você tem 6 tentativas!\n");
                     printf("_____________   \n|.|         |   \n|.|        _|_\n|.|          \n|.|        \ \n|.|         \n|.| \n|.| \n|.| \n\n");
                     break;
 
@@ -231,7 +236,7 @@ char* cria_string_vazia(char* string_vazia, int tamanho){
     return string_vazia;
 }
 
-void verifica_tentativa(char* palavra, char* palavra_vazia, char* erros){
+void verifica_tentativa(char* palavra, char* palavra_vazia, char* erros, int contador_erros){
     char chute;
     int acertos = 0;
     int erros_cometidos = 0;
@@ -246,14 +251,23 @@ void verifica_tentativa(char* palavra, char* palavra_vazia, char* erros){
         }
     }
     if (acertos == 0) {
-        for (int j = 0; erros != ' '; j++){
-            erros_cometidos++;
+        if (contador_erros < 6){
+            erros[contador_erros] = chute;
         }
-        if (erros_cometidos < 6){
-            erros[erros_cometidos] = chute;
-        }
+        contador_erros++;
     }
 
+}
+
+void mostra_erros(char erros[], int contador_erros){
+    if (contador_erros > 0){
+        printf("Letras erradas: \n");
+        for (int i = 0; i < contador_erros; i++){
+        printf("%c\n", erros[i]);
+        }
+    } else if (contador_erros == 0) {
+        printf("Você não errou... ainda!\n");
+    }
 }
 
 
