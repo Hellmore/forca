@@ -5,29 +5,32 @@
 #include <string.h>
 
 int menu_principal();
-char* recebe_palavra();
+char* recebe_palavra(char *palavra);
 int inicia_jogo();
 void desenha_forca(int contador, int inicio);
 int verifica_tamanho(char* palavra);
-void verifica_tentativa();
+char* cria_string_vazia(char* string_vazia, int tamanho);
+void verifica_tentativa(char* palavra, char* palavra_vazia, char* erros);
 
 
 int main()
 {
     int inicio_do_jogo, contador_jogadas = 0, tamanho_palavra;
-    char* palavra[100];
+    char palavra[100], palavra_vazia[100], erros[6] = {' '};
 
     setlocale(LC_ALL, "Portuguese");
     inicio_do_jogo = menu_principal();
     if (inicio_do_jogo == 1) {
         system("cls");
-        strcpy(palavra, recebe_palavra());
+        recebe_palavra(palavra);
         system("cls");
         if (inicia_jogo() == 1) {
             system("cls");
             tamanho_palavra = verifica_tamanho(palavra);
-            printf("%d\n", tamanho_palavra);
+            strcpy(palavra_vazia, cria_string_vazia(palavra_vazia, tamanho_palavra));
             desenha_forca(contador_jogadas, 0);
+            verifica_tentativa(palavra, palavra_vazia, erros);
+
 
         }
 
@@ -82,8 +85,7 @@ int menu_principal(){
     return opcao;
 }
 
-char* recebe_palavra(){
-    static char palavra[100];
+char* recebe_palavra(char *palavra){
     printf("\n##########################################################");
     printf("\n#                                                        #");
     printf("\n#                                                        #");
@@ -221,7 +223,36 @@ int verifica_tamanho(char* palavra){
     return tamanho;
 }
 
-void verifica_tentativa(){
+char* cria_string_vazia(char* string_vazia, int tamanho){
+    for (int i = 0; i < tamanho; i++){
+        string_vazia[i] = '_';
+    }
+    string_vazia[tamanho] = '\0';
+    return string_vazia;
+}
+
+void verifica_tentativa(char* palavra, char* palavra_vazia, char* erros){
+    char chute;
+    int acertos = 0;
+    int erros_cometidos = 0;
+    printf("Digite a letra que deseja chutar:\n");
+    getchar();
+    scanf("%c", &chute);
+    getchar();
+    for (int i = 0; palavra[i] != '\n' && palavra[i] != '\0'; i++){
+        if (chute == palavra[i]){
+            palavra_vazia[i] = chute;
+            acertos++;
+        }
+    }
+    if (acertos == 0) {
+        for (int j = 0; erros != ' '; j++){
+            erros_cometidos++;
+        }
+        if (erros_cometidos < 6){
+            erros[erros_cometidos] = chute;
+        }
+    }
 
 }
 
