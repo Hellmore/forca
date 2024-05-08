@@ -8,11 +8,13 @@ int menu_principal();
 char* recebe_palavra();
 int inicia_jogo();
 void desenha_forca(int contador, int inicio);
+int verifica_tamanho(char* palavra);
+void verifica_tentativa();
 
 
 int main()
 {
-    int inicio_do_jogo, contador_jogadas = 0;
+    int inicio_do_jogo, contador_jogadas = 0, tamanho_palavra;
     char* palavra[100];
 
     setlocale(LC_ALL, "Portuguese");
@@ -22,8 +24,11 @@ int main()
         strcpy(palavra, recebe_palavra());
         system("cls");
         if (inicia_jogo() == 1) {
-                system("cls");
+            system("cls");
+            tamanho_palavra = verifica_tamanho(palavra);
+            printf("%d\n", tamanho_palavra);
             desenha_forca(contador_jogadas, 0);
+
         }
 
     } else {
@@ -167,30 +172,37 @@ void desenha_forca(int contador, int inicio){
     if(inicio == 0){
             switch(contador){
                 case 0:
+                    printf("Começou o jogo! Você tem 6 tentativas!\n");
                     printf("_____________   \n|.|         |   \n|.|        _|_\n|.|          \n|.|        \ \n|.|         \n|.| \n|.| \n|.| \n\n");
                     break;
 
                 case 1:
+                    printf("Você tem 5 tentativas!\n");
                     printf("_____________   \n|.|         |   \n|.|        _|_\n|.|         O    \n|.|         \n|.|       \n|.| \n|.| \n|.| \n\n");
                     break;
 
                 case 2:
+                    printf("Você tem 4 tentativas!\n");
                     printf("_____________   \n|.|         |   \n|.|        _|_\n|.|         O    \n|.|         |    \n|.|         \n|.| \n|.| \n|.| \n\n");
                     break;
 
                 case 3:
+                    printf("Você tem 3 tentativas!\n");
                     printf("_____________   \n|.|         |   \n|.|        _|_\n|.|         O    \n|.|        /|    \n|.|         \n|.| \n|.| \n|.| \n\n");
                     break;
 
                 case 4:
+                    printf("Você tem 2 tentativas!\n");
                     printf("_____________   \n|.|         |   \n|.|        _|_\n|.|         O    \n|.|        /|\\    \n|.|         \n|.| \n|.| \n|.| \n\n");
                     break;
 
                 case 5:
+                    printf("Você tem apenas 1 tentativa!\n");
                     printf("_____________   \n|.|         |   \n|.|        _|_\n|.|         O    \n|.|        /|\\    \n|.|        /  \n|.|  \n|.|  \n|.| \n\n");
                     break;
 
                 case 6:
+                    printf("FORCA!!!\n");
                     printf("_____________   \n|.|         |   \n|.|        _|_\n|.|         O    \n|.|        /|\\    \n|.|        / \\ \n|.|  \n|.|  \n|.| \n\n");
                     break;
             }
@@ -198,6 +210,18 @@ void desenha_forca(int contador, int inicio){
     } else {
     puts("_____________ \n|.|         |   \n|.|        _|_\n|.|         O    \t JOGO DA FORCA \n|.|        /|\\           Briena Bertoni \n|.|        / \\           Heloisa Moraes \n|.|                      Jaqueline Neder \n|.|                      Vannilia Santos Lima \n|.|                      Yago Elias Sigognini \n|.| \n|.| \n");
     }
+
+}
+
+int verifica_tamanho(char* palavra){
+    int tamanho = 0;
+    for (int i = 0; palavra[i] != '\n' && palavra[i] != '\0'; i++){
+        tamanho++;
+    }
+    return tamanho;
+}
+
+void verifica_tentativa(){
 
 }
 
