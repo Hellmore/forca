@@ -5,67 +5,77 @@
 #include <string.h>
 
 int menu_principal();
-char* recebe_palavra(char *palavra);
-int inicia_jogo();
+void recebe_palavra(char* palavra);
+void padroniza_palavra(char* palavra);
+int inicia_adivinhacao();
 void desenha_forca(int contador, int inicio);
 int verifica_tamanho(char* palavra);
 char* cria_string_vazia(char* string_vazia, int tamanho);
 void verifica_tentativa(char* palavra, char* palavra_vazia, char* erros, int* contador_erros);
+void padroniza_tentativa(char* chute);
 int verifica_vitoria(char* palavra_vazia);
 void mostra_acertos(char* palavra_vazia);
 void mostra_erros(char erros[], int contador_erros);
 void mostra_correta(char* palavra);
 void vitoria();
 void derrota();
+void jogar_novamente(int continuar_jogo, int* contador_erros);
 
 
 int main(){
-    int inicio_do_jogo, contador_erros = 0, tamanho_palavra;
+    system("mode 800");
+    int inicio_do_jogo, contador_erros = 0, tamanho_palavra, continuar_jogo = 1;
     char palavra[100], palavra_vazia[100], erros[6] = {' '};
 
     setlocale(LC_ALL, "Portuguese");
-    inicio_do_jogo = menu_principal();
-    if (inicio_do_jogo == 1) {
-        system("cls");
-        recebe_palavra(palavra);
-        system("cls");
-        if (inicia_jogo() == 1) {
+    while (continuar_jogo == 1) {
+        inicio_do_jogo = menu_principal();
+        if (inicio_do_jogo == 1) {
             system("cls");
-            tamanho_palavra = verifica_tamanho(palavra);
-            strcpy(palavra_vazia, cria_string_vazia(palavra_vazia, tamanho_palavra));
-            do {
-                desenha_forca(contador_erros, 0);
-                verifica_tentativa(palavra, palavra_vazia, erros, &contador_erros);
+            recebe_palavra(palavra);
+            padroniza_palavra(palavra);
+            system("cls");
+            if (inicia_adivinhacao() == 1) {
                 system("cls");
-                mostra_acertos(palavra_vazia);
-                mostra_erros(erros, contador_erros);
-
-                if (verifica_vitoria(palavra_vazia) == 1) {
+                tamanho_palavra = verifica_tamanho(palavra);
+                strcpy(palavra_vazia, cria_string_vazia(palavra_vazia, tamanho_palavra));
+                do {
+                    desenha_forca(contador_erros, 0);
+                    verifica_tentativa(palavra, palavra_vazia, erros, &contador_erros);
                     system("cls");
-                    vitoria();
-                    desenha_forca(contador_erros, 1);
-                    break;
-                }
+                    mostra_acertos(palavra_vazia);
+                    mostra_erros(erros, contador_erros);
 
-                if (contador_erros >= 6) {
-                    system("cls");
-                    derrota();
-                    mostra_correta(palavra);
-                    desenha_forca(contador_erros, 1);
-                    break;
-                }
+                    if (verifica_vitoria(palavra_vazia) == 1) {
+                        system("cls");
+                        vitoria();
+                        desenha_forca(contador_erros, 1);
+                        jogar_novamente(continuar_jogo, &contador_erros);
+                        break;
+                    }
 
-                if (strcmp(palavra, palavra_vazia) != 0 && contador_erros < 6) {
-                    continue;
-                }
+                    if (contador_erros >= 6) {
+                        system("cls");
+                        derrota();
+                        mostra_correta(palavra);
+                        desenha_forca(contador_erros, 1);
+                        jogar_novamente(continuar_jogo, &contador_erros);
+                        break;
+                    }
 
-            } while (1);
+                    if (strcmp(palavra, palavra_vazia) != 0 && contador_erros < 6) {
+                        continue;
+                    }
+
+                } while (1);
+            }
+
+        } else {
+            system("cls");
+            menu_principal();
         }
-
-    } else {
-        system("cls");
-        menu_principal();
     }
+
 
 }
 
@@ -111,7 +121,7 @@ int menu_principal(){
     return opcao;
 }
 
-char* recebe_palavra(char *palavra){
+void recebe_palavra(char* palavra){
     printf("\n##########################################################");
     printf("\n#                                                        #");
     printf("\n#                                                        #");
@@ -130,8 +140,8 @@ char* recebe_palavra(char *palavra){
     printf("\n#        Você deve escolher a palavra a ser              #");
     printf("\n#        adivinhada!                                     #");
     printf("\n#                                                        #");
-    printf("\n#        Por favor, utilize apenas letras minúsculas     #");
-    printf("\n#        sem acentuação.                                 #");
+    printf("\n#        Por favor, não use acentuação.                  #");
+    printf("\n#                                                        #");
     printf("\n#                                                        #");
     printf("\n#        Você pode utilizar palavras compostas!          #");
     printf("\n#        Exemplo: Guarda-chuva                           #");
@@ -150,10 +160,15 @@ char* recebe_palavra(char *palavra){
     printf("\n ###");
     printf("\n  #\n");
     fgets(palavra, 100, stdin);
-    return palavra;
 }
 
-int inicia_jogo(){
+void padroniza_palavra(char* palavra){
+    for (int i = 0; palavra[i] != '\0'; i++){
+        palavra[i] = tolower(palavra[i]);
+    }
+}
+
+int inicia_adivinhacao(){
     int inicio;
     printf("\n##########################################################");
     printf("\n#                                                        #");
@@ -165,7 +180,6 @@ int inicia_jogo(){
     printf("\n#        ##  #  # # ## #### #  # #  # ####     ####      #");
     printf("\n#      # ##  #  # #  # #  # #  # #  # # #      ##        #");
     printf("\n#      ####  #### #### #  # ###  #### #  #     ####      #");
-    printf("\n#                                                        #");
     printf("\n#                                                        #");
     printf("\n#                                                        #");
     printf("\n#                                                        #");
@@ -183,6 +197,7 @@ int inicia_jogo(){
     printf("\n#                                                        #");
     printf("\n#                                                        #");
     printf("\n#        Digite 1 para começar a adivinhar!              #");
+    printf("\n#                                                        #");
     printf("\n#                                                        #");
     printf("\n#                                                        #");
     printf("\n##########################################################");
@@ -264,13 +279,13 @@ char* cria_string_vazia(char* string_vazia, int tamanho){
     return string_vazia;
 }
 
-void verifica_tentativa(char* palavra, char* palavra_vazia, char* erros, int* contador_erros) {
+void verifica_tentativa(char* palavra, char* palavra_vazia, char* erros, int* contador_erros){
     char chute;
     int acerto = 0;
     printf("Digite a letra que deseja chutar:\n");
     scanf(" %c", &chute);
     getchar();
-
+    padroniza_tentativa(&chute);
     for (int i = 0; palavra[i] != '\0'; i++) {
         if (chute == palavra[i]) {
             palavra_vazia[i] = chute;
@@ -282,6 +297,10 @@ void verifica_tentativa(char* palavra, char* palavra_vazia, char* erros, int* co
         erros[*contador_erros] = chute;
         (*contador_erros)++;
     }
+}
+
+void padroniza_tentativa(char* chute){
+    *chute = tolower(*chute);
 }
 
 int verifica_vitoria(char* palavra_vazia){
@@ -312,12 +331,12 @@ void mostra_erros(char erros[], int contador_erros){
     }
 }
 
-void mostra_correta(char* palavra) {
+void mostra_correta(char* palavra){
     printf("\n\nA palavra correta era...\n");
     printf("\n%s\n\n", palavra);
 }
 
-void vitoria() {
+void vitoria(){
     printf("\n##########################################################");
     printf("\n#                                                        #");
     printf("\n#                                                        #");
@@ -383,4 +402,14 @@ void derrota(){
     printf("\n#                                                         #");
     printf("\n#                                                         #");
     printf("\n###########################################################\n");
+}
+
+void jogar_novamente(int continuar_jogo, int* contador_erros){
+    printf("Deseja jogar novamente?\n");
+    printf("Digite 1 para sim e 0 para não: \n");
+    scanf("%d", &continuar_jogo);
+    if (continuar_jogo == 1){
+        *contador_erros = 0;
+    }
+    system("cls");
 }
