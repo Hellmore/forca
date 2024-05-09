@@ -19,7 +19,7 @@ void mostra_erros(char erros[], int contador_erros);
 void mostra_correta(char* palavra);
 void vitoria();
 void derrota();
-void jogar_novamente(int continuar_jogo, int* contador_erros);
+void jogar_novamente(int* continuar_jogo, int* contador_erros);
 
 
 int main(){
@@ -258,7 +258,7 @@ void desenha_forca(int contador, int inicio){
             }
 
     } else {
-    puts("_____________ \n|.|         |   \n|.|        _|_\n|.|         O    \t JOGO DA FORCA \n|.|        /|\\           Briena Bertoni \n|.|        / \\           Heloisa Moraes \n|.|                      Jaqueline Neder \n|.|                      Vannilia Santos Lima \n|.|                      Yago Elias Sigognini \n|.| \n|.| \n");
+    puts("_____________ \n|.|         |   \n|.|        _|_\n|.|         O    \t JOGO DA FORCA \n|.|        /|\\ \n|.|        / \\           Feito por: Heloisa Moraes \n|.| \n|.| \n|.| \n|.| \n|.| \n");
     }
 
 }
@@ -404,12 +404,14 @@ void derrota(){
     printf("\n###########################################################\n");
 }
 
-void jogar_novamente(int continuar_jogo, int* contador_erros){
+void jogar_novamente(int* continuar_jogo, int* contador_erros){
     printf("Deseja jogar novamente?\n");
     printf("Digite 1 para sim e 0 para não: \n");
     scanf("%d", &continuar_jogo);
     if (continuar_jogo == 1){
         *contador_erros = 0;
+    } else if (continuar_jogo == 0) {
+        *continuar_jogo = 0;
     }
     system("cls");
 }
